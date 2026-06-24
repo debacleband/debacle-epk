@@ -19,8 +19,17 @@ function deezerEmbedUrl(url: string): string | null {
   return m ? `https://widget.deezer.com/widget/dark/${m[1]}/${m[2]}` : null;
 }
 
+function appleEmbedUrl(url: string): string | null {
+  const m = url.match(/music\.apple\.com\/([a-z]{2})\/(album|playlist)\/([A-Za-z0-9-]+)\/(\d+)(?:\?i=(\d+))?/);
+  if (!m) return null;
+  const [, country, type, slug, id, trackId] = m;
+  const base = `https://embed.music.apple.com/${country}/${type}/${slug}/${id}`;
+  return trackId ? `${base}?i=${trackId}` : base;
+}
+
 const spotify = track.spotifyUrl ? spotifyEmbedUrl(track.spotifyUrl) : null;
 const deezer = track.deezerUrl ? deezerEmbedUrl(track.deezerUrl) : null;
+const apple = track.appleUrl ? appleEmbedUrl(track.appleUrl) : null;
 const cover = track.coverArt ? urlFor(track.coverArt).width(80).height(80).url() : null;
 ---
 
@@ -75,6 +84,29 @@ const cover = track.coverArt ? urlFor(track.coverArt).width(80).height(80).url()
         rel="noopener noreferrer"
       >
         Deezer: {track.deezerUrl}
+      </a>
+    </div>
+  )}
+  {apple && (
+    <div>
+      <span class="mb-1 block text-xs font-medium uppercase tracking-wider text-zinc-400">Apple Music</span>
+      <iframe
+        src={apple}
+        width="100%"
+        height="152"
+        frameborder="0"
+        allowfullscreen
+        allow="autoplay; clipboard-write; encrypted-media"
+        loading="lazy"
+        class="rounded-lg"
+      />
+      <a
+        href={track.appleUrl}
+        class="music-print-link hidden text-xs text-zinc-500 mt-1"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        apple: {track.appleUrl}
       </a>
     </div>
   )}

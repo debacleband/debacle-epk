@@ -68,6 +68,7 @@ export interface Track {
   title: string;
   spotifyUrl?: string;
   deezerUrl?: string;
+  appleUrl?: string;
   coverArt?: any;
 }
 
@@ -90,6 +91,8 @@ export interface Contact {
   instagram?: string;
   spotify?: string;
   deezer?: string;
+  tiktok?: string;
+  appleMusic?: string;
 }
 
 export interface EPK {
@@ -98,6 +101,7 @@ export interface EPK {
   genres?: string[];
   heroImage?: any;
   biography?: any[];
+  onlinePresence?: any[];
   tracks?: Track[];
   photos?: any[];
   videos?: Video[];
@@ -113,11 +117,13 @@ export async function getEpk(): Promise<EPK | null> {
       genres,
       heroImage,
       biography,
+      onlinePresence,
       tracks[]{
         _key,
         title,
         spotifyUrl,
         deezerUrl,
+        appleUrl,
         coverArt
       },
       photos[]{

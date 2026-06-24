@@ -96,6 +96,12 @@ export default defineType({
               description: "e.g. https://www.deezer.com/track/…",
             }),
             defineField({
+              name: "appleUrl",
+              title: "Apple Music URL",
+              type: "url",
+              description: "e.g. https://music.apple.com/track/…",
+            }),
+            defineField({
               name: "coverArt",
               title: "Cover Art",
               type: "image",
@@ -104,6 +110,40 @@ export default defineType({
           ],
           preview: {
             select: { title: "title", media: "coverArt" },
+          },
+        },
+      ],
+    }),
+
+    // ── Online ─────────────────────────────────────────────────────
+
+    defineField({
+      name: "onlinePresence",
+      title: "En ligne",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            { title: "Heading", value: "h2" },
+            { title: "Sub-heading", value: "h3" },
+            { title: "Quote", value: "blockquote" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+              { title: "Underline", value: "underline" },
+            ],
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "Link",
+                fields: [{ name: "href", type: "url", title: "URL" }],
+              },
+            ],
           },
         },
       ],
