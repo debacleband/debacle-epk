@@ -1,0 +1,81 @@
+---
+import type { Track } from '../lib/sanity';
+import { urlFor } from '../lib/sanity';
+
+interface Props {
+  track: Track;
+}
+
+const { track } = Astro.props;
+
+function spotifyEmbedUrl(url: string): string | null {
+  // Handles both share links (.com/track/ID) and embed links (.com/embed/track/ID)
+  const m = url.match(/spotify\.com\/(?:embed\/)?(track|album|playlist)\/([A-Za-z0-9]+)/);
+  return m ? `https://open.spotify.com/embed/${m[1]}/${m[2]}?utm_source=generator&theme=0` : null;
+}
+
+function deezerEmbedUrl(url: string): string | null {
+  const m = url.match(/deezer\.com\/(?:[a-z]+\/)?(track|album|playlist)\/(\d+)/);
+  return m ? `https://widget.deezer.com/widget/dark/${m[1]}/${m[2]}` : null;
+}
+
+const spotify = track.spotifyUrl ? spotifyEmbedUrl(track.spotifyUrl) : null;
+const deezer = track.deezerUrl ? deezerEmbedUrl(track.deezerUrl) : null;
+const cover = track.coverArt ? urlFor(track.coverArt).width(80).height(80).url() : null;
+---
+
+<div class="flex flex-col gap-3 rounded-xl bg-zinc-900 p-4">
+  <div class="flex items-center gap-3">
+    {cover && <img src={cover} alt={track.title} class="h-12 w-12 rounded-md object-cover flex-none" />}
+    <h3 class="text-base font-semibold leading-tight">{track.title}</h3>
+  </div>
+
+  {spotify && (
+    <div>
+      <span class="mb-1 block text-xs font-medium uppercase tracking-wider text-zinc-400">Spotify</span>
+      <iframe
+        src={spotify}
+        width="100%"
+        height="152"
+        frameborder="0"
+        allowfullscreen
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        class="rounded-lg"
+      />
+      <!-- Print fallback -->
+      <a
+        href={track.spotifyUrl}
+        class="music-print-link hidden text-xs text-zinc-500 mt-1"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Spotify: {track.spotifyUrl}
+      </a>
+    </div>
+  )}
+
+  {deezer && (
+    <div>
+      <span class="mb-1 block text-xs font-medium uppercase tracking-wider text-zinc-400">Deezer</span>
+      <iframe
+        src={deezer}
+        width="100%"
+        height="152"
+        frameborder="0"
+        allowfullscreen
+        allow="autoplay; clipboard-write; encrypted-media"
+        loading="lazy"
+        class="rounded-lg"
+      />
+      <a
+        href={track.deezerUrl}
+        class="music-print-link hidden text-xs text-zinc-500 mt-1"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Deezer: {track.deezerUrl}
+      </a>
+    </div>
+  )}
+</div>

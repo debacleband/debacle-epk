@@ -1,0 +1,122 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Photo {
+  asset: { url: string };
+  alt?: string;
+  caption?: string;
+}
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+if (!photos?.length) return;
+---
+
+<div class="mx-auto w-full max-w-[800px]">
+  <div class="carousel-wrapper relative overflow-hidden rounded-xl">
+    <!-- Track -->
+    <div
+      id="carousel-track"
+      class="carousel-track flex overflow-x-auto snap-x snap-mandatory scroll-smooth"
+      style="scrollbar-width: none; -ms-overflow-style: none;"
+    >
+      {photos.map((photo, i) => (
+        <div class="carousel-slide flex-none w-full snap-start overflow-hidden">
+          <img
+            src={photo.asset.url + '?w=800&auto=format'}
+            alt={photo.alt ?? `Photo ${i + 1}`}
+            class="w-full object-cover aspect-video"
+            loading={i === 0 ? 'eager' : 'lazy'}
+          />
+          {photo.caption && (
+            <p class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3 text-sm text-white">
+              {photo.caption}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- Prev / Next -->
+    {photos.length > 1 && (
+      <>
+        <button
+          id="carousel-prev"
+          class="carousel-nav absolute left-3 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white transition hover:bg-black/80 cursor-pointer"
+          aria-label="Previous photo"
+        >
+          <Icon name="lucide:chevron-left" size="1em" />
+        </button>
+        <button
+          id="carousel-next"
+          class="carousel-nav absolute right-3 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white transition hover:bg-black/80 cursor-pointer"
+          aria-label="Next photo"
+        >
+          <Icon name="lucide:chevron-right" size="1em" />
+        </button>
+
+        <!-- Dots -->
+        <div class="carousel-dots absolute bottom-3 inset-x-0 flex justify-center gap-2">
+          {photos.map((_, i) => (
+            <button
+              class:list={[
+                'dot h-2 w-2 rounded-full transition',
+                i === 0 ? 'bg-white' : 'bg-white/40',
+              ]}
+              data-index={i}
+              aria-label={`Go to photo ${i + 1}`}
+            />
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</div>
+
+<style>
+  #carousel-track::-webkit-scrollbar { display: none; }
+</style>
+
+<script>
+  const track = document.getElementById('carousel-track') as HTMLDivElement | null;
+  if (!track) throw new Error('carousel-track not found');
+
+  const slides = Array.from(track.querySelectorAll<HTMLElement>('.carousel-slide'));
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('.dot'));
+
+  let current = 0;
+
+  function updateDots(): void {
+    dots.forEach((d, i) => {
+      d.classList.toggle('bg-white', i === current);
+      d.classList.toggle('bg-white/40', i !== current);
+    });
+  }
+
+  function goTo(index: number): void {
+    if (slides.length === 0) return;
+    current = ((index % slides.length) + slides.length) % slides.length;
+    slides[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    updateDots();
+  }
+
+  document.getElementById('carousel-prev')?.addEventListener('click', () => goTo(current - 1));
+  document.getElementById('carousel-next')?.addEventListener('click', () => goTo(current + 1));
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  track.addEventListener('scroll', () => {
+    const idx = Math.round(track.scrollLeft / track.clientWidth);
+    if (idx !== current) {
+      current = idx;
+      updateDots();
+    }
+  }, { passive: true });
+</script>
