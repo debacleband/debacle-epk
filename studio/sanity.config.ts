@@ -3,8 +3,8 @@ import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./schemas";
 
-const projectId = process.env.PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.PUBLIC_SANITY_DATASET;
+const projectId = "zr6f438v";
+const dataset = "production";
 
 export default defineConfig({
   name: "debacle-epk",
