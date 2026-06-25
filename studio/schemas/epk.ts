@@ -84,6 +84,23 @@ export default defineType({
               validation: (R) => R.required(),
             }),
             defineField({
+              name: "desc",
+              title: "Track Description",
+              type: "array",
+              of: [
+                {
+                  type: "block",
+                  styles: [{ title: "Normal", value: "normal" }],
+                  marks: {
+                    decorators: [
+                      { title: "Bold", value: "strong" },
+                      { title: "Italic", value: "em" },
+                    ],
+                  },
+                },
+              ],
+            }),
+            defineField({
               name: "spotifyUrl",
               title: "Spotify URL",
               type: "url",
@@ -120,6 +137,137 @@ export default defineType({
     defineField({
       name: "onlinePresence",
       title: "En ligne",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            { title: "Heading", value: "h2" },
+            { title: "Sub-heading", value: "h3" },
+            { title: "Quote", value: "blockquote" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+              { title: "Underline", value: "underline" },
+            ],
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "Link",
+                fields: [{ name: "href", type: "url", title: "URL" }],
+              },
+            ],
+          },
+        },
+      ],
+    }),
+
+    // ── Press Reviews ─────────────────────────────────────────────────────────
+    defineField({
+      name: "reviews",
+      title: "Reviews",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            { title: "Heading", value: "h2" },
+            { title: "Sub-heading", value: "h3" },
+            { title: "Quote", value: "blockquote" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+              { title: "Underline", value: "underline" },
+            ],
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "Link",
+                fields: [{ name: "href", type: "url", title: "URL" }],
+              },
+            ],
+          },
+        },
+      ],
+    }),
+    defineField({
+      name: "reviewVideos",
+      title: "Review Videos",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "reviewVideo",
+          title: "Review Video",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (R) => R.required(),
+            }),
+            defineField({
+              name: "desc",
+              title: "Description",
+              type: "string",
+              validation: (R) => R.required(),
+            }),
+            defineField({
+              name: "url",
+              title: "URL",
+              type: "url",
+              validation: (R) => R.required(),
+            }),
+          ],
+          preview: { select: { title: "title", subtitle: "url" } },
+        },
+      ],
+    }),
+    defineField({
+      name: "itws",
+      title: "Interviews",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            { title: "Heading", value: "h2" },
+            { title: "Sub-heading", value: "h3" },
+            { title: "Quote", value: "blockquote" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+              { title: "Underline", value: "underline" },
+            ],
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "Link",
+                fields: [{ name: "href", type: "url", title: "URL" }],
+              },
+            ],
+          },
+        },
+      ],
+    }),
+
+    // ── Live ─────────────────────────────────────────────────────
+
+    defineField({
+      name: "live",
+      title: "Live",
       type: "array",
       of: [
         {
@@ -253,6 +401,11 @@ export default defineType({
         defineField({
           name: "tiktok",
           title: "TikTok Profile URL",
+          type: "url",
+        }),
+        defineField({
+          name: "facebook",
+          title: "Facebook Profile URL",
           type: "url",
         }),
         defineField({

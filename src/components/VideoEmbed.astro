@@ -2,46 +2,65 @@
 interface Props {
   title: string;
   url: string;
+  desc?: string;
 }
 
-const { title, url } = Astro.props;
+const { title, url, desc } = Astro.props;
 
-function toEmbedUrl(raw: string): string | null {
+type EmbedInfo = { url: string; portrait: boolean } | null;
+
+function toEmbedInfo(raw: string): EmbedInfo {
   // YouTube: watch?v=ID or youtu.be/ID or shorts/ID
-  let m = raw.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-  if (m) return `https://www.youtube.com/embed/${m[1]}?rel=0`;
+  let m = raw.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
+  );
+  if (m)
+    return {
+      url: `https://www.youtube.com/embed/${m[1]}?rel=0`,
+      portrait: false,
+    };
 
-  // Vimeo: vimeo.com/ID or player.vimeo.com/video/ID
-  m = raw.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-  if (m) return `https://player.vimeo.com/video/${m[1]}?dnt=1`;
+  // Instagram Reel or post: /reel/ID/ or /p/ID/
+  m = raw.match(/instagram\.com\/(?:reel|p)\/([A-Za-z0-9_-]+)/);
+  if (m)
+    return {
+      url: `https://www.instagram.com/reel/${m[1]}/embed/`,
+      portrait: true,
+    };
 
   return null;
 }
 
-const embedUrl = toEmbedUrl(url);
+const embed = toEmbedInfo(url);
 ---
 
-{embedUrl ? (
-  <div class="flex flex-col gap-2">
-    <h3 class="text-base font-semibold">{title}</h3>
-    <div class="relative aspect-video overflow-hidden rounded-xl bg-zinc-900">
-      <iframe
-        src={embedUrl}
-        title={title}
-        width="100%"
-        height="100%"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-        loading="lazy"
-        class="absolute inset-0 h-full w-full"
-      />
+{
+  embed ? (
+    <div class="flex flex-col gap-2 rounded-xl bg-zinc-900 p-4">
+      <h3 class="text-base font-semibold">{title}</h3>
+      {desc && <p class="text-sm text-zinc-400">{desc}</p>}
+      <div
+        class={`relative overflow-hidden rounded-xl bg-zinc-900 ${embed.portrait ? "aspect-[9/16] max-w-xs w-full self-center" : "aspect-video"}`}>
+        <iframe
+          src={embed.url}
+          title={title}
+          width="100%"
+          height="100%"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"
+          class="absolute inset-0 h-full w-full"
+        />
+      </div>
+      <p class="music-print-link hidden text-xs text-zinc-500">
+        Video:{" "}
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          {url}
+        </a>
+      </p>
     </div>
-    <!-- Print fallback -->
-    <p class="music-print-link hidden text-xs text-zinc-500">
-      Video: <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
-    </p>
-  </div>
-) : (
-  <p class="text-sm text-zinc-500">Unsupported video URL: {url}</p>
-)}
+  ) : (
+    <p class="text-sm text-zinc-500">Unsupported video URL: {url}</p>
+  )
+}

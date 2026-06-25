@@ -1,6 +1,6 @@
 ---
 import type { Track } from '../lib/sanity';
-import { urlFor } from '../lib/sanity';
+import { urlFor, portableTextToHtml } from '../lib/sanity';
 
 interface Props {
   track: Track;
@@ -27,6 +27,7 @@ function appleEmbedUrl(url: string): string | null {
   return trackId ? `${base}?i=${trackId}` : base;
 }
 
+const descHtml: string | null = track.desc ? portableTextToHtml(track.desc) : null;
 const spotify = track.spotifyUrl ? spotifyEmbedUrl(track.spotifyUrl) : null;
 const deezer = track.deezerUrl ? deezerEmbedUrl(track.deezerUrl) : null;
 const apple = track.appleUrl ? appleEmbedUrl(track.appleUrl) : null;
@@ -38,6 +39,13 @@ const cover = track.coverArt ? urlFor(track.coverArt).width(80).height(80).url()
     {cover && <img src={cover} alt={track.title} class="h-12 w-12 rounded-md object-cover flex-none" />}
     <h3 class="text-base font-semibold leading-tight">{track.title}</h3>
   </div>
+
+  {descHtml && (
+    <div
+      class="text-sm text-zinc-300 leading-relaxed [&_p]:mb-1 [&_strong]:text-zinc-300 [&_em]:italic"
+      set:html={descHtml}
+    />
+  )}
 
   {spotify && (
     <div>
