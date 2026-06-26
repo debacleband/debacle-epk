@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
   title: string;
@@ -7,7 +7,7 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description = '', ogImage } = Astro.props;
+const { title, description = "", ogImage } = Astro.props;
 ---
 
 <html lang="en">
@@ -23,19 +23,29 @@ const { title, description = '', ogImage } = Astro.props;
   <body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
     <slot />
 
-    <button
+    <!-- <button
       id="print-btn"
       onclick="window.print()"
       class="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-zinc-900 shadow-lg transition hover:bg-zinc-200 print:hidden"
       aria-label="Export as PDF"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="6 9 6 2 18 2 18 9"></polyline>
-        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-        <rect x="6" y="14" width="12" height="8"></rect>
-      </svg>
-      Export PDF
-    </button>
+    > -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+      <polyline points="6 9 6 2 18 2 18 9"></polyline>
+      <path
+        d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+      ></path>
+      <rect x="6" y="14" width="12" height="8"></rect>
+    </svg>
+    Export PDF
   </body>
 </html>
 
@@ -57,7 +67,9 @@ const { title, description = '', ogImage } = Astro.props;
     #print-btn,
     .carousel-nav,
     .carousel-dots,
-    iframe { display: none !important; }
+    iframe {
+      display: none !important;
+    }
 
     /* Expand carousel into a grid */
     .carousel-track {
@@ -76,15 +88,27 @@ const { title, description = '', ogImage } = Astro.props;
     }
 
     /* Show print-only Spotify/Deezer links instead of iframes */
-    .music-print-link { display: block !important; }
+    .music-print-link {
+      display: block !important;
+    }
 
     /* Page break hints */
-    section { break-inside: avoid; }
-    h2 { break-after: avoid; }
+    section {
+      break-inside: avoid;
+    }
+    h2 {
+      break-after: avoid;
+    }
 
     /* Preserve colours for press kit feel */
-    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
 
-    a { color: inherit; text-decoration: none; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
 </style>
