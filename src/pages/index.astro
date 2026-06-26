@@ -110,6 +110,22 @@ const liveHtml = data.live ? portableTextToHtml(data.live) : null;
       )
     }
 
+    <!-- Videos -->
+    {
+      data.videos && data.videos.length > 0 && (
+        <section aria-labelledby="videos-heading">
+          <h2 id="videos-heading" class="section-heading">
+            Vidéos
+          </h2>
+          <div class="grid gap-8 sm:grid-cols-2">
+            {data.videos.map((video) => (
+              <VideoEmbed title={video.title} url={video.url} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
     <!-- Online Presence -->
 
     {
@@ -126,7 +142,7 @@ const liveHtml = data.live ? portableTextToHtml(data.live) : null;
                 Streaming
               </h2>
               {data.contact && (
-                <div class="mt-3 mb-3 flex flex-row gap-3">
+                <div class="mt-3 mb-3 flex flex-wrap gap-3">
                   {data.contact.spotify && (
                     <a
                       href={data.contact.spotify}
@@ -152,6 +168,15 @@ const liveHtml = data.live ? portableTextToHtml(data.live) : null;
                       target="_blank"
                       rel="noopener noreferrer">
                       Apple Music
+                    </a>
+                  )}
+                  {data.contact.youtube && (
+                    <a
+                      href={data.contact.youtube}
+                      class="social-link"
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      YouTube
                     </a>
                   )}
                 </div>
@@ -282,22 +307,6 @@ const liveHtml = data.live ? portableTextToHtml(data.live) : null;
       )
     }
 
-    <!-- Videos -->
-    {
-      data.videos && data.videos.length > 0 && (
-        <section aria-labelledby="videos-heading">
-          <h2 id="videos-heading" class="section-heading">
-            Vidéos
-          </h2>
-          <div class="grid gap-8 sm:grid-cols-2">
-            {data.videos.map((video) => (
-              <VideoEmbed title={video.title} url={video.url} />
-            ))}
-          </div>
-        </section>
-      )
-    }
-
     <!-- Press -->
     {
       data.pressQuotes && data.pressQuotes.length > 0 && (
@@ -378,6 +387,24 @@ const liveHtml = data.live ? portableTextToHtml(data.live) : null;
                 target="_blank"
                 rel="noopener noreferrer">
                 TikTok
+              </a>
+            )}
+            {data.contact.facebook && (
+              <a
+                href={data.contact.facebook}
+                class="social-link"
+                target="_blank"
+                rel="noopener noreferrer">
+                Facebook
+              </a>
+            )}
+            {data.contact.youtube && (
+              <a
+                href={data.contact.youtube}
+                class="social-link"
+                target="_blank"
+                rel="noopener noreferrer">
+                YouTube
               </a>
             )}
             {data.contact.spotify && (

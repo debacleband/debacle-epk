@@ -409,6 +409,11 @@ export default defineType({
           type: "url",
         }),
         defineField({
+          name: "youtube",
+          title: "Youtube Profile URL",
+          type: "url",
+        }),
+        defineField({
           name: "spotify",
           title: "Spotify Artist URL",
           type: "url",
